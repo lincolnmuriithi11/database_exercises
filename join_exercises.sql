@@ -140,22 +140,33 @@ ORDER BY s.salary DESC
 LIMIT 1;
 
 -- 10.Determine the average salary for each department. Use all salary information and round your results.
+SELECT 
+    d.dept_name, AVG(s.salary) AS Salary
+FROM
+    dept_emp de
+        JOIN
+    salaries s ON de.emp_no = s.emp_no
+        JOIN
+    departments d ON d.dept_no = de.dept_no
+GROUP BY d.dept_name;
 
 -- 11. Bonus Find the names of all current employees, their department name, and their current manager's name.
 
 
--- SELECT CONCAT(e.first_name, ' ', e.last_name) AS 'Employee Name', d.dept_name AS 'Department Name', CONCAT(e.first_name, ' ', e.last_name) AS 'Manager Name' 
--- FROM departments d
+SELECT CONCAT(e.first_name, ' ', e.last_name) AS 'Employee Name', d.dept_name AS 'Department Name', CONCAT(e2.first_name, ' ', e2.last_name) AS 'Manager Name' 
 
--- JOIN dept_emp de ON d.dept_no = de.dept_no
+ FROM departments d
 
--- JOIN employees e ON de.emp_no = e.emp_no
+JOIN dept_emp de ON d.dept_no = de.dept_no
 
--- JOIN dept_manager dm ON d.emp_no = dm.emp_no
+JOIN employees e ON de.emp_no = e.emp_no
 
--- JOIN employees e2 ON dm.emp_no = e.emp_no
--- WHERE de.to_date = '9999-01-01'
--- AND dm.to_date = '9999-01-01'
+JOIN dept_manager dm ON dm.dept_no = de.dept_no
 
--- GROUP BY CONCAT(e.first_name, ' ', e.last_name), d.dept_name;
+JOIN employees e2 ON dm.emp_no = e2.emp_no # (SELF JOIN)
+WHERE de.to_date = '9999-01-01'
+AND dm.to_date = '9999-01-01'
+
+ORDER BY d.dept_name
+#Different tables might have similar foreign key names careful to pick the right key to join the tables 
 

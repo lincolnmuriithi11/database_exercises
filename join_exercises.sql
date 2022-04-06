@@ -28,7 +28,7 @@ FROM
         JOIN
     employees e ON dm.emp_no = e.emp_no
 WHERE
-    dm.to_date > NOW()AND Gender = 'F'
+    dm.to_date > NOW() AND Gender = 'F'
 ORDER BY dept_name;
 
 -- 4.Find the current titles of employees currently working in the Customer Service department.
@@ -60,8 +60,7 @@ FROM
         JOIN
     salaries s ON e.emp_no = s.emp_no
 WHERE
-    dm.to_date > NOW()
-        AND s.to_date > NOW()
+    dm.to_date > NOW() AND s.to_date > NOW()
 ORDER BY dept_name;
 -- 6.  Find the number of current employees in each department.
 SELECT 
@@ -74,28 +73,21 @@ FROM
     dept_emp de ON de.dept_no = d.dept_no
 WHERE
     de.to_date > NOW()
-
-GROUP BY d.dept_name, d.dept_no
-
+GROUP BY d.dept_name , d.dept_no
 ORDER BY d.dept_no;
 -- 7. Which department has the highest average salary? Hint: Use current not historic information.
 SELECT 
     d.dept_name AS 'dept_name', AVG(s.salary) AS 'salary'
-
 FROM
     departments d
         JOIN
     dept_emp de ON d.dept_no = de.dept_no
         JOIN
     salaries s ON de.emp_no = s.emp_no
-
 WHERE
     de.to_date > NOW() AND s.to_date > NOW()
-
 GROUP BY d.dept_name
-
 ORDER BY AVG(s.salary) DESC
-
 LIMIT 1;
 
 
@@ -112,21 +104,16 @@ FROM
     employees e ON de.emp_no = e.emp_no
         JOIN
     salaries s ON e.emp_no = s.emp_no
-
 WHERE
     d.dept_name = 'Marketing'
         AND de.to_date > NOW()
         AND s.to_date > NOW()
-
 ORDER BY s.salary DESC
-
-LIMIT 1; 
+LIMIT 1;
 -- 9. Which current department manager has the highest salary?
 SELECT 
-    
     e.first_name, e.last_name, s.salary, d.dept_name
 FROM
-    
     departments d
         JOIN
     dept_manager dm ON d.dept_no = dm.dept_no
@@ -153,20 +140,23 @@ GROUP BY d.dept_name;
 -- 11. Bonus Find the names of all current employees, their department name, and their current manager's name.
 
 
-SELECT CONCAT(e.first_name, ' ', e.last_name) AS 'Employee Name', d.dept_name AS 'Department Name', CONCAT(e2.first_name, ' ', e2.last_name) AS 'Manager Name' 
-
- FROM departments d
-
-JOIN dept_emp de ON d.dept_no = de.dept_no
-
-JOIN employees e ON de.emp_no = e.emp_no
-
-JOIN dept_manager dm ON dm.dept_no = de.dept_no
-
-JOIN employees e2 ON dm.emp_no = e2.emp_no # (SELF JOIN)
-WHERE de.to_date = '9999-01-01'
-AND dm.to_date = '9999-01-01'
-
-ORDER BY d.dept_name
+SELECT 
+    CONCAT(e.first_name, ' ', e.last_name) AS 'Employee Name',
+    d.dept_name AS 'Department Name',
+    CONCAT(e2.first_name, ' ', e2.last_name) AS 'Manager Name'
+FROM
+    departments d
+        JOIN
+    dept_emp de ON d.dept_no = de.dept_no
+        JOIN
+    employees e ON de.emp_no = e.emp_no
+        JOIN
+    dept_manager dm ON dm.dept_no = de.dept_no
+        JOIN
+    employees e2 ON dm.emp_no = e2.emp_no
+WHERE
+    de.to_date = '9999-01-01'
+        AND dm.to_date = '9999-01-01'
+ORDER BY d.dept_name;
 #Different tables might have similar foreign key names careful to pick the right key to join the tables 
 
